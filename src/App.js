@@ -1,12 +1,62 @@
 // import logo from './logo.svg';
 // import './App.css';
+
+import LeftBar from './components/leftBar/LeftBar';
+import Navbar from './components/navBar/Navbar';
+import RightBar from './components/rightBar/RightBar';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Route, Outlet, Navigate } from 'react-router-dom';
+import Home from './pages/home/Home';
+import Profile from './pages/profile/Profile';
 
 function App() {
 
+  const currentUser = true;
+
+  //This function creates static UI for navbar, leftbar, right bar 
+  const Layout = () => {
+    return (
+      <div>
+        <Navbar />
+        <div style={{ display: 'flex' }}>
+          <LeftBar />
+          <Outlet />
+          <RightBar />
+        </div>
+      </div>
+    );
+  };
+
+  //This function checks if the current user is logged in or not, children refers to layout function
+  const ProtectedRoute = ({ children }) => {
+    if (!currentUser) {
+      return <Navigate to="/login" />
+    }
+
+    return children;
+  };
+
+  // Create navigation for login and register pages
   const router = createBrowserRouter([
+    {
+      path: '/',
+      element: [
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+        ],
+      children: [
+        {
+          path: '/',
+          element: <Home />
+        },
+        {
+          path: '/profile/:id',
+          element: <Profile />
+        }
+      ]
+    },
     {
       path: '/login',
       element: <Login />
