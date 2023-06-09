@@ -2,7 +2,7 @@ import './rightBar.scss';
 
 const RightBar = () => {
   return (
-    <div className='rightbar'>Rightbar Component</div>
+    <div className='rightbar'>Right</div>
   );
 }
 
